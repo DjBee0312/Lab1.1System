@@ -18,7 +18,6 @@ while i < n:
     A = random.random()
     fi = np.random.uniform(-np.pi / 2, np.pi / 2)
     while t < N:
-        # x.append(A * math.sin(w * t + fi))
         x[t] += A * math.sin(w * t + fi)
         t += 1
 
