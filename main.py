@@ -15,9 +15,9 @@ while i < n:
     w += omega / n
     i += 1
     t = 0
-    A = random.random()
-    fi = np.random.uniform(-np.pi / 2, np.pi / 2)
     while t < N:
+        A = random.random()
+        fi = np.random.uniform(-np.pi / 2, np.pi / 2)
         x[t] += A * math.sin(w * t + fi)
         t += 1
 
