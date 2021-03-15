@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 n = 14
 omega = 1800
-N = 4096  # 256
+N = 256  # 256
 w = 0
 i = 0
 t = 0
@@ -36,36 +36,39 @@ plt.show()
 p = 0
 k = 0
 
-start_time = time.time()
-iterator = 0
-while iterator < 10:
-    while p < N:
-        k = 0
-        while k < N:
-            f[p] += x[k] * (np.cos(2 * np.pi * p * k / N) - np.sin(2 * np.pi * p * k / N) * 1j)
-            k += 1
-        p += 1
-    iterator += 1
 
-end_time = time.time()
-average_time = (end_time - start_time) / 10
-print("start_time")
-print(start_time)
-print("end_time")
-print(end_time)
-print("global_time")
-print(end_time - start_time)
-print("average_time")
-print(average_time)
+while p < N:
+    k = 0
+    while k < N:
+        f[p] += x[k] * (np.cos(2 * np.pi * p * k / N) - np.sin(2 * np.pi * p * k / N) * 1j)
+        k += 1
+    p += 1
+
+
+def fft(x):
+    V = len(x)
+    if V <= 1:
+        return x
+    even = fft(x[0::2])
+    odd = fft(x[1::2])
+    T = [np.exp(-2j * np.pi * m / V) * odd[m] for m in range(V // 2)]
+    return [even[m] + T[m] for m in range(V // 2)] + [even[m] - T[m] for m in range(V // 2)]
+
 
 A = np.zeros(N)
+B = np.zeros(N)
+y = fft(x)
 A = np.abs(f)
+B = np.abs(y)
 A = 2 * A / N
-print(A)
-
-H = list(range(1, 2048))  # 128
+B = 2 * B / N
 
 plt.plot(A)
 plt.ylabel("Фурье")
-plt.xlim(0, 2048)  # 128
+plt.xlim(0, 128)  # 128
+plt.show()
+
+plt.plot(B)
+plt.ylabel("fft")
+plt.xlim(0, 128)  # 128
 plt.show()
